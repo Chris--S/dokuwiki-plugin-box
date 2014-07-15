@@ -15,16 +15,7 @@ require_once(DOKU_PLUGIN.'action.php');
 
 class action_plugin_box extends DokuWiki_Action_Plugin {
 
-	function getInfo(){
-		return array(
-		'author' => 'i-net software / Gerry Weissbach',
-        'email'  => 'tools@inetsoftware.de',
-        'date'   => '2009-11-11',
-        'name'   => 'Box Plugin Action Component',
-		);
-	}
-
-	function register(&$controller) {
+	function register(Doku_Event_Handler $controller) {
 		$controller->register_hook('ACTION_SHOW_REDIRECT', 'BEFORE', $this, 'act_box_redirect_execute');
 	}
 

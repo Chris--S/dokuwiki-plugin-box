@@ -36,24 +36,6 @@ class syntax_plugin_box extends DokuWiki_Syntax_Plugin {
 	var $_content_colours = '';
 	var $_title_colours   = '';
 
-	/**
-	 * return some info
-	 */
-	function getInfo(){
-		return array(
-        'author' => 'Christopher Smith / i-net software',
-        'email'  => 'tools@inetsoftware.de',
-        'date'   => '2010-04-21 (original 2008-11-11)',
-        'name'   => 'Box Plugin',
-        'desc'   => 'Boxes with titles, colour and rounded corners. 
-                     Syntax: <box width class colours|title> ... </box|caption>
-                     width, class, colours title & caption are optional.
-                     The title can include some wiki markup, the box
-                     contents can include almost any wiki markup.',
-        'url'    => 'http://www.inetsoftware.de/other-products/dokuwiki-plugins/boxes',
-		);
-	}
-
 	function getType(){ return 'protected';}
 	function getAllowedTypes() { return array('container','substition','protected','disabled','formatting','paragraphs'); }
 	function getPType(){ return 'block';}
@@ -87,7 +69,7 @@ class syntax_plugin_box extends DokuWiki_Syntax_Plugin {
 	/**
 	 * Handle the match
 	 */
-	function handle($match, $state, $pos, &$handler){
+	function handle($match, $state, $pos, Doku_Handler $handler){
 
 		switch ($state) {
 			case DOKU_LEXER_ENTER:
@@ -128,7 +110,7 @@ class syntax_plugin_box extends DokuWiki_Syntax_Plugin {
 	/**
 	 * Create output
 	 */
-	function render($mode, &$renderer, $indata) {
+	function render($mode, Doku_Renderer $renderer, $indata) {
 		global $ID, $ACT;
 
 		// $pos is for the current position in the wiki page
