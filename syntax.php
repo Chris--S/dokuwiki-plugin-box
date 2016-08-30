@@ -25,7 +25,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
  */
-class syntax_plugin_box extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
 
 	var $title_mode = false;
 	var $title_pos = array();
