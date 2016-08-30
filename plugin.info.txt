@@ -1,4 +1,4 @@
-base     box
+base     box2
 author   Christopher Smith
 email    chris@jalakai.co.uk
 author   Gerry Weißbach
@@ -6,4 +6,4 @@ email    gweissbach@inetsoftware.de
 date     2014-07-15
 name     Box Plugin
 desc     Boxes with titles, colour and rounded corners. Syntax: <box width class colors style=value|title> ... </box|caption> width, class, colours title & caption are optional. The title can include some wiki markup, the box contents can include almost any wiki markup.
-url      http://dokuwiki.org/plugin:box
+url      http://dokuwiki.org/plugin:box2
