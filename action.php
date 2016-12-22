@@ -15,20 +15,20 @@ require_once(DOKU_PLUGIN.'action.php');
 
 class action_plugin_box2 extends DokuWiki_Action_Plugin {
 
-	function register(Doku_Event_Handler $controller) {
-		$controller->register_hook('ACTION_SHOW_REDIRECT', 'BEFORE', $this, 'act_box_redirect_execute');
-	}
+    function register(Doku_Event_Handler $controller) {
+        $controller->register_hook('ACTION_SHOW_REDIRECT', 'BEFORE', $this, 'act_box_redirect_execute');
+    }
 
-	function act_box_redirect_execute( &$event ) {
-		global $PRE;
-		global $TEXT;
+    function act_box_redirect_execute( &$event ) {
+        global $PRE;
+        global $TEXT;
 
-		if ( !empty($event->data['fragment']) ) { return; }
-		if ( $event->data['preact'] == 'save' ) { return; }
-		
-		if($PRE && preg_match('/^\s*<box.*?\|([^>\n]+)/',$TEXT,$match)){
-			$check = false; //Byref
-			$event->data['fragment'] = sectionID($match[1], $check);
-		}
-	}
+        if ( !empty($event->data['fragment']) ) { return; }
+        if ( $event->data['preact'] == 'save' ) { return; }
+        
+        if($PRE && preg_match('/^\s*<box.*?\|([^>\n]+)/',$TEXT,$match)){
+            $check = false; //Byref
+            $event->data['fragment'] = sectionID($match[1], $check);
+        }
+    }
 }
