@@ -196,13 +196,17 @@ class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
               (\#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}))|        #colorvalue
               (rgb\(([0-9]{1,3}%?,){2}[0-9]{1,3}%?\))     #rgb triplet
               )$/x', $token)) {
-			$styles['colour'][] = $token;
-			continue;
-              }
+                $styles['colour'][] = $token;
+                continue;
+            }
+            
+            if ( preg_match('/^(margin|padding)(-(left|right|top|bottom))?:\d+(%|px|em|ex|pt|cm|mm|pi|in)$/', $token)) {
+                $styles['spacing'][] = $token;
+            }
 
-              // restrict token (class names) characters to prevent any malicious data
-              if (preg_match('/[^A-Za-z0-9_-]/',$token)) continue;
-              $styles['class'] = (isset($styles['class']) ? $styles['class'].' ' : '').$token;
+            // restrict token (class names) characters to prevent any malicious data
+            if (preg_match('/[^A-Za-z0-9_-]/',$token)) continue;
+            $styles['class'] = (isset($styles['class']) ? $styles['class'].' ' : '').$token;
 		}
 		if (!empty($styles['colour'])) {
 			$styles['colour'] = $this->_box_colours($styles['colour']);
@@ -263,23 +267,21 @@ class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
 	function _xhtml_boxopen($styles) {
 		$class = 'class="box' . (isset($styles['class']) ? ' '.$styles['class'] : '') . '"';
 		$style = isset($styles['width']) ? "width: {$styles['width']};" : '';
+		$style .= isset($styles['spacing']) ? implode(';', $styles['spacing']) : '';
 
 		if (isset($styles['colour'])) {
-			$colours = 'background-color: '.$styles['colour']['outer_background'].'; ';
-			$colours .= 'border-color: '.$styles['colour']['borders'].';';
+			$style .= 'background-color:'.$styles['colour']['outer_background'].';';
+			$style .= 'border-color: '.$styles['colour']['borders'].';';
 
 			$this->_content_colours = 'style="background-color: '.$styles['colour']['content_background'].'; border-color: '.$styles['colour']['borders'].'"';
 			$this->_title_colours = 'style="background-color: '.$styles['colour']['title_background'].';"';
 
 		} else {
-			$colours = '';
-
 			$this->_content_colours = '';
 			$this->_title_colours = '';
 		}
 
-		if ($style || $colours) $style = ' style="'.$style.' '.$colours.'"';
-		if ($colours) $colours = ' style="'.$colours.'"';
+		if (strlen($style)) $style = ' style="'.$style.'"';
 
 		$this->_xb_colours[] = $colours;
 
