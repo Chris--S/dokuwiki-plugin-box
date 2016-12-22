@@ -5,6 +5,8 @@
  * Syntax:     <box width% classes|title>
  *   width%    width of the box, must use % unit
  *   classes   one or more classes used to style the box, several predefined styles included in style.css
+ *   padding   can be defined with each direction or as composite
+ *   margin    can be defined with each direction or as composite
  *   title     (optional) all text after '|' will be rendered above the main code text with a
  *             different style.
  *
