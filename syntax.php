@@ -57,15 +57,15 @@ class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
      * Connect pattern to lexer
      */
     function connectTo($mode) {
-        $this->Lexer->addEntryPattern('<box>(?=.*?</box.*?>)',$mode,'plugin_box');
-        $this->Lexer->addEntryPattern('<box\s[^\r\n\|]*?>(?=.*?</box.*?>)',$mode,'plugin_box');
-        $this->Lexer->addEntryPattern('<box\|(?=[^\r\n]*?\>.*?</box.*?\>)',$mode,'plugin_box');
-        $this->Lexer->addEntryPattern('<box\s[^\r\n\|]*?\|(?=[^\r\n]*?>.*?</box.*?>)',$mode,'plugin_box');
+        $this->Lexer->addEntryPattern('<box>(?=.*?</box.*?>)',$mode,'plugin_box2');
+        $this->Lexer->addEntryPattern('<box\s[^\r\n\|]*?>(?=.*?</box.*?>)',$mode,'plugin_box2');
+        $this->Lexer->addEntryPattern('<box\|(?=[^\r\n]*?\>.*?</box.*?\>)',$mode,'plugin_box2');
+        $this->Lexer->addEntryPattern('<box\s[^\r\n\|]*?\|(?=[^\r\n]*?>.*?</box.*?>)',$mode,'plugin_box2');
     }
 
     function postConnect() {
-        $this->Lexer->addPattern('>', 'plugin_box');
-        $this->Lexer->addExitPattern('</box.*?>', 'plugin_box');
+        $this->Lexer->addPattern('>', 'plugin_box2');
+        $this->Lexer->addExitPattern('</box.*?>', 'plugin_box2');
     }
 
     /**
