@@ -30,8 +30,6 @@ require_once(DOKU_PLUGIN.'syntax.php');
 class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
 
     var $title_mode = false;
-    var $title_pos = array();
-    var $title_name = array();
 
     // the following are used in rendering and are set by _xhtml_boxopen()
     var $_xb_colours      = array();
@@ -123,19 +121,16 @@ class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
             switch ($instr) {
                 case 'title_open' :
                     $this->title_mode = true;
-                    $this->title_pos[] = $pos; // Start Position for Section Editing
-                    $renderer->doc .= $this->_xhtml_boxopen($data);
-                    $renderer->doc .= "<h2 class='box_title " . (method_exists($renderer, "finishSectionEdit") ? $renderer->startSectionEdit($pos, 'section', 'box') : "") . " '{$this->_title_colours}>";
+                    $renderer->doc .= $this->_xhtml_boxopen($renderer, $pos, $data);
+                    $renderer->doc .= '<h2 class="box_title"' . $this->_title_colours . '>';
                     break;
 
                 case 'box_open' :
                     if ($this->title_mode) {
                         $this->title_mode = false;
-                        $renderer->doc .= "</h2>\n<div class='box_content'{$this->_content_colours}>";
+                        $renderer->doc .= "</h2>\n<div class=\"box_content\"" . $this->_content_colours . '>';
                     } else {
-                        $this->title_pos[] = $pos; // Start Position for Section Editing
-                        $this->title_name[] = 'box_' . 'no-title' . '_' . md5(time());
-                        $renderer->doc .= $this->_xhtml_boxopen($data)."<div class='box_content'{$this->_content_colours}>";
+                        $renderer->doc .= $this->_xhtml_boxopen($renderer, $pos, $data) . '<div class="box_content"' . $this->_content_colours . '>';
                     }
                     break;
 
@@ -143,7 +138,6 @@ class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
                     $output = $renderer->_xmlEntities($data);
 
                     if ( $this->title_mode ) {
-                        $this->title_name[] = 'box_' . cleanID($output) . '_' . md5($output);
                         $hid = $renderer->_headerToLink($output,true);
                         $renderer->doc .= '<a id="' . $hid . '" name="' . $hid . '">' . $output . '</a>';
                         break;
@@ -156,23 +150,16 @@ class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
                     $renderer->doc .= "</div>\n";
 
                     if ($data) {
-                        $renderer->doc .= "<p class='box_caption'{$this->_title_colours}>".$renderer->_xmlEntities($data)."</p>\n";
+                        $renderer->doc .= '<p class="box_caption"' . $this->_title_colours . '>' . $renderer->_xmlEntities($data) . "</p>\n";
                     }
 
                     // insert the section edit button befor the box is closed - array_pop makes sure we take the last box
-                    if ( $this->getConf('allowSectionEdit') && $ACT != 'preview' ) {
+                    if ( method_exists($renderer, "finishSectionEdit") ) {
                         $renderer->nocache();
-                        
-                        
-                        if ( auth_quickaclcheck($ID) > AUTH_READ ) {
-                            $title = array_pop($this->title_name); // Clean up
-                            if ( method_exists($renderer, "finishSectionEdit") ) {
-                                $renderer->finishSectionEdit($pos);
-                            }
-                        }
+                        $renderer->finishSectionEdit($pos);
                     }
 
-                    $renderer->doc .= $this->_xhtml_boxclose();
+                    $renderer->doc .= "\n" . $this->_xhtml_boxclose();
                         
                     break;
             }
@@ -266,8 +253,8 @@ class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
         }
     }
 
-    function _xhtml_boxopen($styles) {
-        $class = 'class="box' . (isset($styles['class']) ? ' '.$styles['class'] : '') . '"';
+    function _xhtml_boxopen($renderer, $pos, $styles) {
+        $class = 'class="box' . (isset($styles['class']) ? ' '.$styles['class'] : '') . (method_exists($renderer, "startSectionEdit") ? " " . $renderer->startSectionEdit($pos, 'section', 'box-' . $pos) : "") . '"';
         $style = isset($styles['width']) ? "width: {$styles['width']};" : '';
         $style .= isset($styles['spacing']) ? implode(';', $styles['spacing']) : '';
 
@@ -291,8 +278,8 @@ class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
          
         // Don't do box extras if there is no style for them
         if ( !empty($colours) ) {
-            $html .="  <b class='xtop'><b class='xb1'$colours>&nbsp;</b><b class='xb2'$colours>&nbsp;</b><b class='xb3'$colours>&nbsp;</b><b class='xb4'$colours>&nbsp;</b></b>\n";
-            $html .="  <div class='xbox'$colours>\n";
+            $html .= '<b class="xtop"><b class="xb1"' . $colours . '>&nbsp;</b><b class="xb2"' . $colours . '">&nbsp;</b><b class="xb3"' . $colours . '>&nbsp;</b><b class="xb4"' . $colours . '>&nbsp;</b></b>' . "\n";
+            $html .= '<div class="xbox"' . $colours . ">\n";
         }
 
         return $html;
@@ -304,10 +291,10 @@ class syntax_plugin_box2 extends DokuWiki_Syntax_Plugin {
 
         // Don't do box extras if there is no style for them
         if ( !empty($colours) ) {
-            $html = "  </div>\n";
-            $html .= "  <b class='xbottom'><b class='xb4'$colours>&nbsp;</b><b class='xb3'$colours>&nbsp;</b><b class='xb2'$colours>&nbsp;</b><b class='xb1'$colours>&nbsp;</b></b>\n";
+            $html = "</div>\n";
+            $html .= '<b class="xbottom"><b class="xb4"' . $colours .  '>&nbsp;</b><b class="xb3"' . $colours . '>&nbsp;</b><b class="xb2"' . $colours . '>&nbsp;</b><b class="xb1"' . $colours . '>&nbsp;</b></b>' . "\n";
         }
-        $html .= "</div> <!-- Extras -->\n";
+        $html .= '</div> <!-- Extras -->' . "\n";
 
         return $html;
     }
