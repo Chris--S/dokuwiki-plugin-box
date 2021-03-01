@@ -92,7 +92,7 @@ class syntax_plugin_box extends DokuWiki_Syntax_Plugin {
 
             case DOKU_LEXER_EXIT:
                 $data = trim(substr($match, 5, -1));
-                $title =  ($data && $data{0} == "|") ? substr($data,1) : '';
+                $title =  ($data && $data[0] == "|") ? substr($data,1) : '';
 
                 return array('box_close', $title);
 
