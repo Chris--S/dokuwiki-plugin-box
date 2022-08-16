@@ -209,10 +209,10 @@ class syntax_plugin_box extends DokuWiki_Syntax_Plugin {
     }
 
     function _colourToTriplet($colour) {
-      if ($colour{0} == '#') {
+      if ($colour[0] == '#') {
         if (strlen($colour) == 4) {
           // format #FFF
-          return array(hexdec($colour{1}.$colour{1}),hexdec($colour{2}.$colour{2}),hexdec($colour{3}.$colour{3}));
+          return array(hexdec($colour[1].$colour[1]),hexdec($colour[2].$colour[2]),hexdec($colour[3].$colour[3]));
         } else {
           // format #FFFFFF
           return array(hexdec(substr($colour,1,2)),hexdec(substr($colour,3,2)), hexdec(substr($colour,5,2)));
