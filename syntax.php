@@ -99,7 +99,7 @@ class syntax_plugin_box extends DokuWiki_Syntax_Plugin
                 }
 
             case DOKU_LEXER_UNMATCHED:
-                $handler->_addCall('cdata', array($match), $pos);
+                $handler->addCall('cdata', array($match), $pos);
                 return false;
 
             case DOKU_LEXER_EXIT:
